@@ -6,4 +6,8 @@ public class CantidadInicialException extends Exception {
         super("La cantidad no puede ser menor a cero");
     }
     
+    public CantidadInicialException(String msg){
+        super(msg);
+    }
+    
 }

@@ -4,8 +4,7 @@ import exceptions.CantidadInicialException;
 import java.util.InputMismatchException;
 import modelo.Cuenta;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * Clase que permite interactuar con el sistema bancario
@@ -18,9 +17,12 @@ public class Caja {
         System.out.println("Creando cuenta");
         
         double cantidadInicial = 0;
+        String nombreTitular = ""; 
         boolean ban = false; 
         do{
             try{
+                System.out.println("Proporciona el nombre de la persona:");
+                nombreTitular = new Scanner(System.in).nextLine();
                 System.out.println("Proporciona la cantidad con la que se abrira la cuenta:");
                 cantidadInicial = new Scanner(System.in).nextDouble(); 
                 ban = false; 
@@ -40,7 +42,7 @@ public class Caja {
         do{ // segunda validacion 
             
             try {
-                c1 = new Cuenta(cantidadInicial); // objeto   
+                c1 = new Cuenta(nombreTitular, cantidadInicial); // objeto   
                 ban = false;
             } catch (CantidadInicialException ex) {
                 ban = true; 
@@ -51,29 +53,53 @@ public class Caja {
         int opc=0;        
         do{
             System.out.println("Menu");
-            System.out.println("1)Depositar");
-            System.out.println("2)Retirar");
-            System.out.println("3)Mostrar saldo");
-            System.out.println("4)Salir");
+            System.out.println("1)Hacer un deposito");
+            System.out.println("2)Retiirar donero de la cuenta");
+            System.out.println("3)Deshabilitar cuenta");
+            System.out.println("4)Habilitar cuenta");
+            System.out.println("5)Mostrar detalles de la cuenta");
+            System.out.println("6)Salir");
             opc = new Scanner(System.in).nextInt(); 
             switch(opc){
                 case 1: 
-                    c1.deposito();
+                    System.out.println("Dame la cantidad a depositar");
+                    int depositar = new Scanner(System.in).nextInt(); 
+                    try {
+                        System.out.println("Su saldo: " + c1.deposito(depositar));
+                    }catch(CantidadInicialException ex){
+                        System.out.println(ex.getMessage());
+                    }
                     break; 
                 case 2:
-                    c1.retiro();
+                    System.out.println("Dame la cantidad a retirar");
+                    int retiro = new Scanner(System.in).nextInt(); 
+                    try {
+                        System.out.println("Su saldo: " + c1.retiro(retiro));
+                    }catch(CantidadInicialException ex){
+                        System.out.println(ex.getMessage());
+                    }
                     break; 
                 case 3:
-                    System.out.println("Saldo: " + c1.getCuenta());
-                    break; 
+                    System.out.println(c1.deshabilitar()
+                            ?"Se deshabilito la cuenta":
+                            "Error: La cuenta ya esta deshabilitada");   
+                    break;
                 case 4:
+                    System.out.println(c1.habilitar()
+                            ?"Se habilito la cuenta":
+                            "Error: La cuenta ya esta habilitada");
+                    break;
+                case 5: 
+                    System.out.println(c1.getDetallesCuenta());
+                    break; 
+                case 6: 
                     System.out.println("Adios");
                     break;
                 default:
                     System.out.println("Opción Inválida");
             }
             
-        }while(opc!=4); 
+        }while(opc!=6); 
         
     }
     
